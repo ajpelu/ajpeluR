@@ -2,6 +2,7 @@ ajpeluR
 ---------------
 
 Author: [@ajpelu](https://twitter.com/ajpelu) 
+
 mail: <ajperez@ugr.es> 
 
 Here I put a collection of different R functions that I use. In the future I will put them into a R package. 
