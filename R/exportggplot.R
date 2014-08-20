@@ -14,5 +14,5 @@ ExportPlot <- function(gplot, filename, width=2, height=1.5) {
     dev.off()
     jpeg(file = paste(filename, '.jpg', sep=""), width = width * 100, height = height * 100)
     print(gplot)
-    dev.off(
-}
+    dev.off()
+    }
