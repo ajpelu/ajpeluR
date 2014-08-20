@@ -12,22 +12,30 @@ License: Creative Commons Attribution 4.0 International License
 
 ##### Use
 * Option 1 
-> library(devtools)
-> source_url('url')
 
+```r 
+library(devtools)
+source_url('url')
+```
 Usage option 1: 
-> # with url as the raw url of the function. Example
-> source_url('https://raw.githubusercontent.com/ajpelu/ajpeluR/master/R/exportggplot.R')
+```r
+# with url as the raw url of the function. Example
+source_url('https://raw.githubusercontent.com/ajpelu/ajpeluR/master/R/exportggplot.R')
+```
 
 * Option 2 
 Use a function to read script from github.
 [Source](http://stackoverflow.com/questions/7715723/sourcing-r-script-over-https)
 
 Load this function
-> github.download = function(url) {
+```r 
+github.download = function(url) {
   fname <- tempfile()
   system(sprintf("curl -3 %s > %s", url, fname))                                                                 (fname)
 }
+```
 
 Usage option 2: 
-> source(github.download('https://raw.githubusercontent.com/ajpelu/ajpeluR/master/R/exportggplot.R'))
+``` r 
+source(github.download('https://raw.githubusercontent.com/ajpelu/ajpeluR/master/R/exportggplot.R'))
+```
