@@ -5,6 +5,7 @@ Firs set working directory
 
 Next, load the packages 
 > require(knitr)
+
 > require(rmarkdown)
 
 Finally convert documents. 
