@@ -126,11 +126,12 @@ nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))
 
 
 Algunos datos: 
-- `r nrow(p_precip_sn[p_precip_sn$tau>0,])` pixeles (`r (nrow(p_precip_sn[p_precip_sn$tau>0,])/nrow(p_precip_sn))*100` %) presentan una tendencia positiva. Existen `r nrow(filter(p_precip_sn, tau > 0, p_value < 0.05))` pixeles con $\tau > 0$ y `pvalue < 0.05`, lo que representa un `r (nrow(filter(p_precip_sn, tau > 0, p_value < 0.05))/nrow(filter(p_precip_sn, tau > 0)))*100` % del total de los pixels con $\tau$ positivo y un `r (nrow(filter(p_precip_sn, tau > 0, p_value < 0.05))/nrow(p_precip_sn))*100` % del total de pixeles para Sierra Nevada. 
-- `r nrow(p_precip_sn[p_precip_sn$tau<0,])` pixeles (`r (nrow(p_precip_sn[p_precip_sn$tau<0,])/nrow(p_precip_sn))*100` %) presentan una tendencia negativa. Existen `r nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))` pixeles con $\tau < 0$ y `pvalue < 0.05`, lo que representa un `r (nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))/nrow(filter(p_precip_sn, tau < 0)))*100` % del total de los pixels con $\tau$ negativo y un `r (nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))/nrow(p_precip_sn))*100` % del total de pixeles para Sierra Nevada. 
+
+* `r nrow(p_precip_sn[p_precip_sn$tau>0,])` pixeles (`r (nrow(p_precip_sn[p_precip_sn$tau>0,])/nrow(p_precip_sn))*100` %) presentan una tendencia positiva. Existen `r nrow(filter(p_precip_sn, tau > 0, p_value < 0.05))` pixeles con $\tau > 0$ y `pvalue < 0.05`, lo que representa un `r (nrow(filter(p_precip_sn, tau > 0, p_value < 0.05))/nrow(filter(p_precip_sn, tau > 0)))*100` % del total de los pixels con $\tau$ positivo y un `r (nrow(filter(p_precip_sn, tau > 0, p_value < 0.05))/nrow(p_precip_sn))*100` % del total de pixeles para Sierra Nevada. 
+* `r nrow(p_precip_sn[p_precip_sn$tau<0,])` pixeles (`r (nrow(p_precip_sn[p_precip_sn$tau<0,])/nrow(p_precip_sn))*100` %) presentan una tendencia negativa. Existen `r nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))` pixeles con $\tau < 0$ y `pvalue < 0.05`, lo que representa un `r (nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))/nrow(filter(p_precip_sn, tau < 0)))*100` % del total de los pixels con $\tau$ negativo y un `r (nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))/nrow(p_precip_sn))*100` % del total de pixeles para Sierra Nevada. 
  
 
-Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio $\alpha=0.05$, y observamos la distribución de frecuencias en los $\tau$ para ambas categorias. 
+Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio $\alpha=0.05$, y observamos la distribución de frecuencias en los $$\tau$$ para ambas categorias. 
 
 ```{r precip_tau_plot}
 # 2 # Categorizacion de las tendencias 
