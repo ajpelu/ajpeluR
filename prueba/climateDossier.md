@@ -443,12 +443,7 @@ Algunos ***resultados sobre las tendencias***:
 Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio `alpha < 0.05`, y observamos la distribución de frecuencias en los tau para ambas categorias.
 
 ``` r
-2 # Categorizacion de las tendencias 
-```
-
-    ## [1] 2
-
-``` r
+# 2 # Categorizacion de las tendencias 
 set.seed(0) 
 # Add a variable to categorize significances 
 p_tmax_sn$sig <- ifelse(p_tmax_sn$p_value < 0.05, 'sig', 'no sig') 
@@ -651,7 +646,6 @@ Finalmente realizamos un plot combinado en el que mostramos el valor promedio de
 
 ``` r
 # 5 # Plot combinado (Ojo solo los significativos). 
-# 5 # Plot combinado (Ojo solo los significativos). 
 df.tmax <- summa_p_tmax_sn[summa_p_tmax_sn$sig == 'sig',]
 g.top.tmax <- ggplot(df.tmax, aes(x = elevC, y = per.sig)) +
   geom_bar(stat='identity') +
@@ -674,3 +668,287 @@ grid.arrange(arrangeGrob(g.top.tmax, g.bottom.tmax, ncol=1, nrow=2, heights = c(
 ```
 
 ![plot of chunk tmax\_combined\_plot](./climateDossier_files/figure-markdown_github/tmax_combined_plot.png)
+
+Tmin
+----
+
+Caracterización de las tendencias.
+
+``` r
+# Tmin
+p_tmin_sn <- filter(p_tmin, pn > 0) 
+
+# 1 # ??Como es la tendencia en la tmax para SN? 
+
+# 1 a # Tau positivo
+# How many pixels have a positive trend? (positive tau values = have increased the tmax value) 
+nrow(p_tmin_sn[p_tmin_sn$tau>0,])
+```
+
+    ## [1] 129759
+
+``` r
+# percentage 
+(nrow(p_tmin_sn[p_tmin_sn$tau>0,])/nrow(p_tmin_sn))*100 
+```
+
+    ## [1] 75.52
+
+``` r
+# Cuantos de ellos son significativos 
+nrow(filter(p_tmin_sn, tau > 0, p_value < 0.05)) 
+```
+
+    ## [1] 7
+
+``` r
+#percentage (del total de taus positivos)
+(nrow(filter(p_tmin_sn, tau > 0, p_value < 0.05))/nrow(filter(p_tmin_sn, tau > 0)))*100
+```
+
+    ## [1] 0.005395
+
+``` r
+#percentage (del total de pixeles de SN)
+(nrow(filter(p_tmin_sn, tau > 0, p_value < 0.05))/nrow(p_tmin_sn))*100
+```
+
+    ## [1] 0.004074
+
+``` r
+# 1 b # Tau negativo
+# How many pixels have a negative trend? (negative tau values = have decreased the tmax value) 
+nrow(p_tmin_sn[p_tmin_sn$tau<0,])
+```
+
+    ## [1] 41762
+
+``` r
+# percentage 
+(nrow(p_tmin_sn[p_tmin_sn$tau<0,])/nrow(p_tmin_sn))*100 
+```
+
+    ## [1] 24.31
+
+``` r
+# Cuantos de ellos son significativos 
+nrow(filter(p_tmin_sn, tau < 0, p_value < 0.05)) 
+```
+
+    ## [1] 0
+
+``` r
+#percentage (del total de taus negativos)
+(nrow(filter(p_tmin_sn, tau < 0, p_value < 0.05))/nrow(filter(p_tmin_sn, tau < 0)))*100
+```
+
+    ## [1] 0
+
+``` r
+#percentage (del total de pixeles de SN)
+(nrow(filter(p_tmin_sn, tau < 0, p_value < 0.05))/nrow(p_tmin_sn))*100
+```
+
+    ## [1] 0
+
+Algunos ***resultados sobre las tendencias***:
+
+-   129759 pixeles (75.5234 %) presentan una tendencia positiva. Existen 7 con `tau > 0` y `pvalue < 0.05` (significativos), lo que representa un 0.0054 % del total de los pixels con tau positivo y un 0.0041 % del total de pixeles para Sierra Nevada.
+-   41762 pixeles (24.3067 %) presentan una tendencia negativa. Existen 0 pixeles con `tau < 0` y `pvalue < 0.05`, lo que representa un 0 % del total de los pixels con tau negativo y un 0 % del total de pixeles para Sierra Nevada.
+
+Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio `alpha < 0.05`, y observamos la distribución de frecuencias en los tau para ambas categorias.
+
+``` r
+# 2 # Categorizacion de las tendencias 
+set.seed(0) 
+# Add a variable to categorize significances 
+p_tmin_sn$sig <- ifelse(p_tmin_sn$p_value < 0.05, 'sig', 'no sig') 
+
+ggplot(p_tmin_sn, aes(x=tau)) + geom_histogram(stat='bin', bindwidth=.1, fill='grey') + 
+  facet_wrap(~sig) + theme_bw() + ggtitle('Tmin')
+```
+
+    ## stat_bin: binwidth defaulted to range/30. Use 'binwidth = x' to adjust this.
+    ## stat_bin: binwidth defaulted to range/30. Use 'binwidth = x' to adjust this.
+
+![plot of chunk tmin\_tau\_plot](./climateDossier_files/figure-markdown_github/tmin_tau_plot.png)
+
+Evaluamos la relación entre la elevación y el valor de tau en los pixeles con el objetivo de ver grupos de elevaciones homogéneos.
+
+``` r
+# 3 # Relaci??n de las tendencias con la elevaci??n (CART)
+fit <- ctree(tau~elev, data=p_tmin_sn)
+fit 
+```
+
+    ## 
+    ##   Conditional inference tree with 21 terminal nodes
+    ## 
+    ## Response:  tau 
+    ## Input:  elev 
+    ## Number of observations:  171813 
+    ## 
+    ## 1) elev <= 2320; criterion = 1, statistic = 17754.317
+    ##   2) elev <= 2045; criterion = 1, statistic = 703.705
+    ##     3) elev <= 600; criterion = 0.999, statistic = 11.669
+    ##       4) elev <= 508; criterion = 1, statistic = 395.439
+    ##         5)*  weights = 2732 
+    ##       4) elev > 508
+    ##         6) elev <= 560; criterion = 1, statistic = 47.904
+    ##           7)*  weights = 956 
+    ##         6) elev > 560
+    ##           8)*  weights = 767 
+    ##     3) elev > 600
+    ##       9) elev <= 1827; criterion = 1, statistic = 69.867
+    ##         10) elev <= 1197; criterion = 1, statistic = 45.947
+    ##           11)*  weights = 25490 
+    ##         10) elev > 1197
+    ##           12) elev <= 1663; criterion = 1, statistic = 129.801
+    ##             13)*  weights = 50179 
+    ##           12) elev > 1663
+    ##             14)*  weights = 19532 
+    ##       9) elev > 1827
+    ##         15) elev <= 1869; criterion = 0.999, statistic = 11.739
+    ##           16)*  weights = 4375 
+    ##         15) elev > 1869
+    ##           17)*  weights = 17024 
+    ##   2) elev > 2045
+    ##     18) elev <= 2159; criterion = 1, statistic = 148.757
+    ##       19) elev <= 2126; criterion = 0.997, statistic = 8.706
+    ##         20)*  weights = 6873 
+    ##       19) elev > 2126
+    ##         21)*  weights = 2549 
+    ##     18) elev > 2159
+    ##       22) elev <= 2284; criterion = 0.998, statistic = 9.663
+    ##         23)*  weights = 9392 
+    ##       22) elev > 2284
+    ##         24)*  weights = 2547 
+    ## 1) elev > 2320
+    ##   25) elev <= 2635; criterion = 1, statistic = 3843.757
+    ##     26) elev <= 2481; criterion = 1, statistic = 453.071
+    ##       27) elev <= 2409; criterion = 1, statistic = 52.446
+    ##         28)*  weights = 5594 
+    ##       27) elev > 2409
+    ##         29)*  weights = 4015 
+    ##     26) elev > 2481
+    ##       30) elev <= 2561; criterion = 1, statistic = 37.622
+    ##         31)*  weights = 3764 
+    ##       30) elev > 2561
+    ##         32)*  weights = 3202 
+    ##   25) elev > 2635
+    ##     33) elev <= 2906; criterion = 1, statistic = 758.808
+    ##       34) elev <= 2741; criterion = 1, statistic = 58.661
+    ##         35) elev <= 2675; criterion = 0.988, statistic = 6.327
+    ##           36)*  weights = 1428 
+    ##         35) elev > 2675
+    ##           37)*  weights = 2370 
+    ##       34) elev > 2741
+    ##         38)*  weights = 4928 
+    ##     33) elev > 2906
+    ##       39) elev <= 3133; criterion = 1, statistic = 89.282
+    ##         40)*  weights = 3466 
+    ##       39) elev > 3133
+    ##         41)*  weights = 630
+
+``` r
+plot(fit)
+```
+
+![plot of chunk tmin\_tau\_cart](./climateDossier_files/figure-markdown_github/tmin_tau_cart.png)
+
+Realizamos una clasificación de las elevaciones en grupos de 500 metros y obtenemos los estadisticos descriptivos por categoría de elevación.
+
+``` r
+# 4 # Categorizacion de las elevaciones 
+# Clasificacion elevaciones
+p_tmin_sn$elevC <- as.factor(ifelse(p_tmin_sn$elev > 3001, '3001-3500',
+                             ifelse(p_tmin_sn$elev > 2501, '2501-3000',
+                             ifelse(p_tmin_sn$elev > 2001, '2001-2500',
+                             ifelse(p_tmin_sn$elev > 1501, '1501-2000',        
+                             ifelse(p_tmin_sn$elev > 1001, '1001-1500', 
+                             ifelse(p_tmin_sn$elev > 501, '501-1000', '0-500')))))))
+
+# Reorder las elevaciones
+p_tmin_sn$elevC <- reorder.factor(p_tmin_sn$elevC, new.order=c("0-500","501-1000","1001-1500","1501-2000","2001-2500","2501-3000","3001-3500"))
+
+# Obtener los summary datos de los taus
+aux.tmin <- ddply(p_tmin_sn, c('elevC', 'sig'), summarise,
+             n= length(tau),
+             mean= mean(tau),
+             sd= sd(tau),
+             se= sd / sqrt (n),
+             .drop=FALSE)
+
+aux1.tmin <- ddply(p_tmin_sn, c('elevC'), summarise,
+                   n.group.elev = length(tau),
+                   mean.group.elev = mean(tau),
+                   sd.group.elev = sd(tau),
+                   se.group.elev = sd.group.elev / sqrt (n.group.elev))
+
+summa_p_tmin_sn <- join(aux.tmin, aux1.tmin, type='full', by='elevC', match='all')
+summa_p_tmin_sn$per.sig <- ( summa_p_tmin_sn$n / summa_p_tmin_sn$n.group.elev )*100
+options(width=120)
+summa_p_tmin_sn
+```
+
+    ##        elevC    sig     n     mean        sd        se n.group.elev mean.group.elev sd.group.elev se.group.elev
+    ## 1      0-500 no sig  2642  0.04847 0.0096613 0.0001880         2642         0.04847      0.009661     0.0001880
+    ## 2      0-500    sig     0      NaN       NaN       NaN         2642         0.04847      0.009661     0.0001880
+    ## 3   501-1000 no sig 15246  0.06930 0.0314169 0.0002544        15246         0.06930      0.031417     0.0002544
+    ## 4   501-1000    sig     0      NaN       NaN       NaN        15246         0.06930      0.031417     0.0002544
+    ## 5  1001-1500 no sig 43619  0.07538 0.0589882 0.0002824        43619         0.07538      0.058988     0.0002824
+    ## 6  1001-1500    sig     0      NaN       NaN       NaN        43619         0.07538      0.058988     0.0002824
+    ## 7  1501-2000 no sig 55578  0.07134 0.0699646 0.0002968        55585         0.07135      0.069973     0.0002968
+    ## 8  1501-2000    sig     7  0.19270 0.0008692 0.0003285        55585         0.07135      0.069973     0.0002968
+    ## 9  2001-2500 no sig 35933  0.04297 0.0749572 0.0003954        35933         0.04297      0.074957     0.0003954
+    ## 10 2001-2500    sig     0      NaN       NaN       NaN        35933         0.04297      0.074957     0.0003954
+    ## 11 2501-3000 no sig 16562 -0.01004 0.0522267 0.0004058        16562        -0.01004      0.052227     0.0004058
+    ## 12 2501-3000    sig     0      NaN       NaN       NaN        16562        -0.01004      0.052227     0.0004058
+    ## 13 3001-3500 no sig  2226 -0.03907 0.0314336 0.0006662         2226        -0.03907      0.031434     0.0006662
+    ## 14 3001-3500    sig     0      NaN       NaN       NaN         2226        -0.03907      0.031434     0.0006662
+    ##      per.sig
+    ## 1  100.00000
+    ## 2    0.00000
+    ## 3  100.00000
+    ## 4    0.00000
+    ## 5  100.00000
+    ## 6    0.00000
+    ## 7   99.98741
+    ## 8    0.01259
+    ## 9  100.00000
+    ## 10   0.00000
+    ## 11 100.00000
+    ## 12   0.00000
+    ## 13 100.00000
+    ## 14   0.00000
+
+Finalmente realizamos un plot combinado en el que mostramos el valor promedio de tau para los pixeles de la misma categoría de elevación, así como el porcentaje de pixeles con tendencias significativas por categoría de elevación.
+
+``` r
+# 5 # Plot combinado (Ojo solo los significativos). 
+df.tmin <- summa_p_tmin_sn[summa_p_tmin_sn$sig == 'sig',]
+g.top.tmin <- ggplot(df.tmin, aes(x = elevC, y = per.sig)) +
+  geom_bar(stat='identity') +
+  theme_bw() + ylab('% of Significative pixels (<0.05)') + 
+  theme(plot.margin = unit(c(1,5,-30,6),units="points"),
+        axis.title.y = element_text(vjust =0.25)) + 
+  ggtitle('Tmin') + ylim(0, 1)
+g.top.tmin 
+```
+
+![plot of chunk tmin\_combined\_plot](./climateDossier_files/figure-markdown_github/tmin_combined_plot1.png)
+
+``` r
+g.bottom.tmin <- ggplot(df.tmin, aes(x=elevC, y=mean.group.elev, group=1)) + 
+  geom_errorbar(aes(ymax = mean.group.elev + se.group.elev, ymin=mean.group.elev - se.group.elev), width=.15) + 
+  geom_line(col='grey') + 
+  geom_point(size=3, shape=21, fill="white") + 
+  theme_bw() + xlab('elevation') + ylab('tau (average value)')+ 
+  theme(plot.margin = unit(c(0,5,1,1),units="points")) 
+
+# g.bottom 
+
+grid.arrange(arrangeGrob(g.top.tmin, g.bottom.tmin, ncol=1, nrow=2, heights = c(1/5, 4/5)))
+```
+
+![plot of chunk tmin\_combined\_plot](./climateDossier_files/figure-markdown_github/tmin_combined_plot2.png)

@@ -260,7 +260,7 @@ Algunos ***resultados sobre las tendencias***:
 Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio `alpha < 0.05`, y observamos la distribución de frecuencias en los tau para ambas categorias. 
 
 ```{r tmax_tau_plot}
-2 # Categorizacion de las tendencias 
+# 2 # Categorizacion de las tendencias 
 set.seed(0) 
 # Add a variable to categorize significances 
 p_tmax_sn$sig <- ifelse(p_tmax_sn$p_value < 0.05, 'sig', 'no sig') 
@@ -313,8 +313,7 @@ summa_p_tmax_sn
 ```
 
 Finalmente realizamos un plot combinado en el que mostramos el valor promedio de tau para los pixeles de la misma categoría de elevación, así como el porcentaje de pixeles con tendencias significativas por categoría de elevación. 
-```{r tmax_combined_plot, fig.height=10}
-# 5 # Plot combinado (Ojo solo los significativos). 
+```{r tmax_combined_plot, fig.height=10} 
 # 5 # Plot combinado (Ojo solo los significativos). 
 df.tmax <- summa_p_tmax_sn[summa_p_tmax_sn$sig == 'sig',]
 g.top.tmax <- ggplot(df.tmax, aes(x = elevC, y = per.sig)) +
@@ -337,6 +336,130 @@ g.bottom.tmax <- ggplot(df.tmax, aes(x=elevC, y=mean.group.elev, group=1)) +
 grid.arrange(arrangeGrob(g.top.tmax, g.bottom.tmax, ncol=1, nrow=2, heights = c(1/5, 4/5)))
 ```
 
+Tmin 
+--- 
+
+Caracterización de las tendencias. 
+
+```{r tmin_tau}
+# Tmin
+p_tmin_sn <- filter(p_tmin, pn > 0) 
+
+# 1 # ??Como es la tendencia en la tmax para SN? 
+
+# 1 a # Tau positivo
+# How many pixels have a positive trend? (positive tau values = have increased the tmax value) 
+nrow(p_tmin_sn[p_tmin_sn$tau>0,])
+# percentage 
+(nrow(p_tmin_sn[p_tmin_sn$tau>0,])/nrow(p_tmin_sn))*100 
+
+# Cuantos de ellos son significativos 
+nrow(filter(p_tmin_sn, tau > 0, p_value < 0.05)) 
+#percentage (del total de taus positivos)
+(nrow(filter(p_tmin_sn, tau > 0, p_value < 0.05))/nrow(filter(p_tmin_sn, tau > 0)))*100
+#percentage (del total de pixeles de SN)
+(nrow(filter(p_tmin_sn, tau > 0, p_value < 0.05))/nrow(p_tmin_sn))*100
+
+
+# 1 b # Tau negativo
+# How many pixels have a negative trend? (negative tau values = have decreased the tmax value) 
+nrow(p_tmin_sn[p_tmin_sn$tau<0,])
+# percentage 
+(nrow(p_tmin_sn[p_tmin_sn$tau<0,])/nrow(p_tmin_sn))*100 
+
+# Cuantos de ellos son significativos 
+nrow(filter(p_tmin_sn, tau < 0, p_value < 0.05)) 
+#percentage (del total de taus negativos)
+(nrow(filter(p_tmin_sn, tau < 0, p_value < 0.05))/nrow(filter(p_tmin_sn, tau < 0)))*100
+#percentage (del total de pixeles de SN)
+(nrow(filter(p_tmin_sn, tau < 0, p_value < 0.05))/nrow(p_tmin_sn))*100
+```
+
+
+Algunos ***resultados sobre las tendencias***: 
+
+* `r nrow(p_tmin_sn[p_tmin_sn$tau>0,])` pixeles (`r (nrow(p_tmin_sn[p_tmin_sn$tau>0,])/nrow(p_tmin_sn))*100` %) presentan una tendencia positiva. Existen `r nrow(filter(p_tmin_sn, tau > 0, p_value < 0.05))` con `tau > 0` y `pvalue < 0.05` (significativos), lo que representa un `r (nrow(filter(p_tmin_sn, tau > 0, p_value < 0.05))/nrow(filter(p_tmin_sn, tau > 0)))*100` % del total de los pixels con tau positivo y un `r (nrow(filter(p_tmin_sn, tau > 0, p_value < 0.05))/nrow(p_tmin_sn))*100` % del total de pixeles para Sierra Nevada. 
+* `r nrow(p_tmin_sn[p_tmin_sn$tau<0,])` pixeles (`r (nrow(p_tmin_sn[p_tmin_sn$tau<0,])/nrow(p_tmin_sn))*100` %) presentan una tendencia negativa. Existen `r nrow(filter(p_tmin_sn, tau < 0, p_value < 0.05))` pixeles con `tau < 0` y `pvalue < 0.05`, lo que representa un `r (nrow(filter(p_tmin_sn, tau < 0, p_value < 0.05))/nrow(filter(p_tmin_sn, tau < 0)))*100` % del total de los pixels con tau negativo y un `r (nrow(filter(p_tmin_sn, tau < 0, p_value < 0.05))/nrow(p_tmin_sn))*100` % del total de pixeles para Sierra Nevada. 
+                                                                                                                                                                                                     
+
+Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio `alpha < 0.05`, y observamos la distribución de frecuencias en los tau para ambas categorias. 
+
+```{r tmin_tau_plot}
+# 2 # Categorizacion de las tendencias 
+set.seed(0) 
+# Add a variable to categorize significances 
+p_tmin_sn$sig <- ifelse(p_tmin_sn$p_value < 0.05, 'sig', 'no sig') 
+
+ggplot(p_tmin_sn, aes(x=tau)) + geom_histogram(stat='bin', bindwidth=.1, fill='grey') + 
+  facet_wrap(~sig) + theme_bw() + ggtitle('Tmin')
+```
+
+
+Evaluamos la relación entre la elevación y el valor de tau en los pixeles con el objetivo de ver grupos de elevaciones homogéneos. 
+```{r tmin_tau_cart}
+# 3 # Relaci??n de las tendencias con la elevaci??n (CART)
+fit <- ctree(tau~elev, data=p_tmin_sn)
+fit 
+plot(fit)
+```
+
+Realizamos una clasificación de las elevaciones en grupos de 500 metros y obtenemos los estadisticos descriptivos por categoría de elevación. 
+```{r tmin_tau_summary}
+# 4 # Categorizacion de las elevaciones 
+# Clasificacion elevaciones
+p_tmin_sn$elevC <- as.factor(ifelse(p_tmin_sn$elev > 3001, '3001-3500',
+                             ifelse(p_tmin_sn$elev > 2501, '2501-3000',
+                             ifelse(p_tmin_sn$elev > 2001, '2001-2500',
+                             ifelse(p_tmin_sn$elev > 1501, '1501-2000',        
+                             ifelse(p_tmin_sn$elev > 1001, '1001-1500', 
+                             ifelse(p_tmin_sn$elev > 501, '501-1000', '0-500')))))))
+
+# Reorder las elevaciones
+p_tmin_sn$elevC <- reorder.factor(p_tmin_sn$elevC, new.order=c("0-500","501-1000","1001-1500","1501-2000","2001-2500","2501-3000","3001-3500"))
+
+# Obtener los summary datos de los taus
+aux.tmin <- ddply(p_tmin_sn, c('elevC', 'sig'), summarise,
+             n= length(tau),
+             mean= mean(tau),
+             sd= sd(tau),
+             se= sd / sqrt (n),
+             .drop=FALSE)
+
+aux1.tmin <- ddply(p_tmin_sn, c('elevC'), summarise,
+                   n.group.elev = length(tau),
+                   mean.group.elev = mean(tau),
+                   sd.group.elev = sd(tau),
+                   se.group.elev = sd.group.elev / sqrt (n.group.elev))
+
+summa_p_tmin_sn <- join(aux.tmin, aux1.tmin, type='full', by='elevC', match='all')
+summa_p_tmin_sn$per.sig <- ( summa_p_tmin_sn$n / summa_p_tmin_sn$n.group.elev )*100
+options(width=120)
+summa_p_tmin_sn
+```
+
+Finalmente realizamos un plot combinado en el que mostramos el valor promedio de tau para los pixeles de la misma categoría de elevación, así como el porcentaje de pixeles con tendencias significativas por categoría de elevación. 
+```{r tmin_combined_plot, fig.height=10}
+# 5 # Plot combinado (Ojo solo los significativos). 
+df.tmin <- summa_p_tmin_sn[summa_p_tmin_sn$sig == 'sig',]
+g.top.tmin <- ggplot(df.tmin, aes(x = elevC, y = per.sig)) +
+  geom_bar(stat='identity') +
+  theme_bw() + ylab('% of Significative pixels (<0.05)') + 
+  theme(plot.margin = unit(c(1,5,-30,6),units="points"),
+        axis.title.y = element_text(vjust =0.25)) + 
+  ggtitle('Tmin') + ylim(0, 1)
+g.top.tmin 
+
+g.bottom.tmin <- ggplot(df.tmin, aes(x=elevC, y=mean.group.elev, group=1)) + 
+  geom_errorbar(aes(ymax = mean.group.elev + se.group.elev, ymin=mean.group.elev - se.group.elev), width=.15) + 
+  geom_line(col='grey') + 
+  geom_point(size=3, shape=21, fill="white") + 
+  theme_bw() + xlab('elevation') + ylab('tau (average value)')+ 
+  theme(plot.margin = unit(c(0,5,1,1),units="points")) 
+
+# g.bottom 
+
+grid.arrange(arrangeGrob(g.top.tmin, g.bottom.tmin, ncol=1, nrow=2, heights = c(1/5, 4/5)))
+```
 
 
 
