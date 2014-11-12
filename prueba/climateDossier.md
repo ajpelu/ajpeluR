@@ -918,12 +918,8 @@ g.top.tmin <- ggplot(df.tmin, aes(x = elevC, y = per.sig)) +
   theme(plot.margin = unit(c(1,5,-30,6),units="points"),
         axis.title.y = element_text(vjust =0.25)) + 
   ggtitle('Tmin') + ylim(0, 1)
-g.top.tmin 
-```
+# g.top.tmin 
 
-![plot of chunk tmin\_combined\_plot](./climateDossier_files/figure-markdown_github/tmin_combined_plot1.png)
-
-``` r
 g.bottom.tmin <- ggplot(df.tmin, aes(x=elevC, y=mean.group.elev, group=1)) + 
   geom_errorbar(aes(ymax = mean.group.elev + se.group.elev, ymin=mean.group.elev - se.group.elev), width=.15) + 
   geom_line(col='grey') + 
@@ -936,11 +932,23 @@ g.bottom.tmin <- ggplot(df.tmin, aes(x=elevC, y=mean.group.elev, group=1)) +
 grid.arrange(arrangeGrob(g.top.tmin, g.bottom.tmin, ncol=1, nrow=2, heights = c(1/5, 4/5)))
 ```
 
-![plot of chunk tmin\_combined\_plot](./climateDossier_files/figure-markdown_github/tmin_combined_plot2.png)
+![plot of chunk tmin\_combined\_plot](./climateDossier_files/figure-markdown_github/tmin_combined_plot.png)
 
 Tabla resumen
 
-| Variable | tendencia | n   | %      | sig. | % de los tau. | % de los totales |
-|----------|-----------|-----|--------|------|---------------|------------------|
-| precip   | tau \> 0  | 298 | 0.1734 | 0    | 0             |                  |
-| precip   | tau \< 0  |     |        |      |               |                  |
+| Variable | tendencia | n      | %       | sig.  | % de los tau. | % de los totales |
+|----------|-----------|--------|---------|-------|---------------|------------------|
+| precip   | tau \> 0  | 298    | 0.1734  | 0     | 0             | 0                |
+| precip   | tau \< 0  | 171460 | 99.7945 | 74516 | 43.4597       | 43.3704          |
+| tmax     | tau\> 0   | 141757 | 82.5066 | 23417 | 16.5191       | 13.6294          |
+| tmax     | tau \< 0  | 29551  | 17.1995 | 0     | 0             | 0                |
+| tmin     | tau \> 0  | 129759 | 75.5234 | 7     | 0.0054        | 0.0041           |
+| tmin     | tau \< 0  | 41762  | 24.3067 | 0     | 0             | 0                |
+
+Ahora todos los plots combinados
+
+``` r
+grid.arrange(arrangeGrob(g.top.precip, g.top.tmax, g.top.tmin, g.bottom.precip, g.bottom.tmax, g.bottom.tmin, ncol=3, nrow=2, heights = c(1/5, 4/5)))
+```
+
+![plot of chunk plotCombinados](./climateDossier_files/figure-markdown_github/plotCombinados.png)

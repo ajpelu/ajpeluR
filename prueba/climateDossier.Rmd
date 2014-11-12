@@ -447,7 +447,7 @@ g.top.tmin <- ggplot(df.tmin, aes(x = elevC, y = per.sig)) +
   theme(plot.margin = unit(c(1,5,-30,6),units="points"),
         axis.title.y = element_text(vjust =0.25)) + 
   ggtitle('Tmin') + ylim(0, 1)
-g.top.tmin 
+# g.top.tmin 
 
 g.bottom.tmin <- ggplot(df.tmin, aes(x=elevC, y=mean.group.elev, group=1)) + 
   geom_errorbar(aes(ymax = mean.group.elev + se.group.elev, ymin=mean.group.elev - se.group.elev), width=.15) + 
@@ -463,8 +463,21 @@ grid.arrange(arrangeGrob(g.top.tmin, g.bottom.tmin, ncol=1, nrow=2, heights = c(
 
 Tabla resumen
 
-| Variable | tendencia | n                                         | %                                                                 | sig.                                                   | % de los tau.                                                                                   | % de los totales |
-|----------|-----------|-------------------------------------------|-------------------------------------------------------------------|--------------------------------------------------------|-------------------------------------------------------------------------------------------------|------------------|
-| precip   | tau > 0   | `r nrow(p_precip_sn[p_precip_sn$tau>0,])` | `r (nrow(p_precip_sn[p_precip_sn$tau>0,])/nrow(p_precip_sn))*100` | `r nrow(filter(p_precip_sn, tau > 0, p_value < 0.05))` | `r (nrow(filter(p_precip_sn, tau > 0, p_value < 0.05))/nrow(filter(p_precip_sn, tau > 0)))*100` |                  |
-| precip   | tau < 0   |                                           |                                                                   |                                                        |                                                                                                 |                  |
+| Variable | tendencia | n                                         | %                                                                 | sig.                                                   | % de los tau.                                                                                   | % de los totales                                                               |
+|----------|-----------|-------------------------------------------|-------------------------------------------------------------------|--------------------------------------------------------|-------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
+| precip   | tau > 0   | `r nrow(p_precip_sn[p_precip_sn$tau>0,])` | `r (nrow(p_precip_sn[p_precip_sn$tau>0,])/nrow(p_precip_sn))*100` | `r nrow(filter(p_precip_sn, tau > 0, p_value < 0.05))` | `r (nrow(filter(p_precip_sn, tau > 0, p_value < 0.05))/nrow(filter(p_precip_sn, tau > 0)))*100` | `r (nrow(filter(p_precip_sn, tau > 0, p_value < 0.05))/nrow(p_precip_sn))*100` |
+| precip   | tau < 0   | `r nrow(p_precip_sn[p_precip_sn$tau<0,])` | `r (nrow(p_precip_sn[p_precip_sn$tau<0,])/nrow(p_precip_sn))*100` | `r nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))` | `r (nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))/nrow(filter(p_precip_sn, tau < 0)))*100` | `r (nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))/nrow(p_precip_sn))*100` |
+| tmax     | tau> 0    | `r nrow(p_tmax_sn[p_tmax_sn$tau>0,])`     | `r (nrow(p_tmax_sn[p_tmax_sn$tau>0,])/nrow(p_tmax_sn))*100`       | `r nrow(filter(p_tmax_sn, tau > 0, p_value < 0.05))`   | `r (nrow(filter(p_tmax_sn, tau > 0, p_value < 0.05))/nrow(filter(p_tmax_sn, tau > 0)))*100`     | `r (nrow(filter(p_tmax_sn, tau > 0, p_value < 0.05))/nrow(p_tmax_sn))*100`     |
+| tmax     | tau < 0   | `r nrow(p_tmax_sn[p_tmax_sn$tau<0,])`     | `r (nrow(p_tmax_sn[p_tmax_sn$tau<0,])/nrow(p_tmax_sn))*100`       | `r nrow(filter(p_tmax_sn, tau < 0, p_value < 0.05))`   | `r (nrow(filter(p_tmax_sn, tau < 0, p_value < 0.05))/nrow(filter(p_tmax_sn, tau < 0)))*100`     | `r (nrow(filter(p_tmax_sn, tau < 0, p_value < 0.05))/nrow(p_tmax_sn))*100`     |
+| tmin     | tau > 0   | `r nrow(p_tmin_sn[p_tmin_sn$tau>0,])`     | `r (nrow(p_tmin_sn[p_tmin_sn$tau>0,])/nrow(p_tmin_sn))*100`       | `r nrow(filter(p_tmin_sn, tau > 0, p_value < 0.05))`   | `r (nrow(filter(p_tmin_sn, tau > 0, p_value < 0.05))/nrow(filter(p_tmin_sn, tau > 0)))*100`     | `r (nrow(filter(p_tmin_sn, tau > 0, p_value < 0.05))/nrow(p_tmin_sn))*100`     |
+| tmin     | tau < 0   | `r nrow(p_tmin_sn[p_tmin_sn$tau<0,])`     | `r (nrow(p_tmin_sn[p_tmin_sn$tau<0,])/nrow(p_tmin_sn))*100`       | `r nrow(filter(p_tmin_sn, tau < 0, p_value < 0.05))`   | `r (nrow(filter(p_tmin_sn, tau < 0, p_value < 0.05))/nrow(filter(p_tmin_sn, tau < 0)))*100`     | `r (nrow(filter(p_tmin_sn, tau < 0, p_value < 0.05))/nrow(p_tmin_sn))*100`     |
+
+
+Ahora todos los plots combinados 
+```{r plotCombinados}
+grid.arrange(arrangeGrob(g.top.precip, g.top.tmax, g.top.tmin, g.bottom.precip, g.bottom.tmax, g.bottom.tmin, ncol=3, nrow=2, heights = c(1/5, 4/5)))
+```
+
+
+
 
