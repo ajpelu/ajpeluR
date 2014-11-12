@@ -43,9 +43,9 @@ Preparamos datos
 ----
 Vamos a cargar los archivos de datos del pasado para las tres variables: `precip`, `tmax` y `tmin`. Para cada pixel y por cada variable tenemos varios atributos:
 
-* **Estadístico $\tau$** (Mann-Kendall Trend Analysis). Su valor varía entre `-1` y `1`   
+* **Estadístico $\tau$ ** (Mann-Kendall Trend Analysis). Su valor varía entre `-1` y `1`   
 * ***p-value*** 
-* elevación 
+* elevación `tex \tau`
 * pertenencia a espacio natural 
 
 En este análisis nos centramos solamente en los pixeles que pertenecen a Sierra Nevada
