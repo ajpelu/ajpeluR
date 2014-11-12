@@ -7,7 +7,7 @@ output:
     variant: markdown_github
 ---
 
-# An?lisis datos de clima del pasado
+# Análisis datos de clima del pasado
 
 ```{r someMetadata}
 # -----------------------------------------------------------
@@ -43,12 +43,12 @@ Preparamos datos
 ----
 Vamos a cargar los archivos de datos del pasado para las tres variables: `precip`, `tmax` y `tmin`. Para cada pixel y por cada variable tenemos varios atributos:
 
-* **Estad?stico tau** (Mann-Kendall Trend Analysis). Su valor var?a entre `-1` y `1`   
+* **Estadístico tau** (Mann-Kendall Trend Analysis). Su valor varía entre `-1` y `1`   
 * ***p-value*** 
-* elevaci?n 
+* elevación 
 * pertenencia a espacio natural 
 
-En este an?lisis nos centramos solamente en los pixeles que pertenecen a Sierra Nevada
+En este análisis nos centramos solamente en los pixeles que pertenecen a Sierra Nevada
 
 ```{r directory}
 # -----------------------------------------------------------
@@ -81,10 +81,10 @@ p_tmin <- join(past_tmin, eleven, type='inner', by='cli_celda_id')
 
 ```
 
-Precipitaci?n
+Precipitación
 --- 
 
-Caracterizaci?n de las tendencias. 
+Caracterización de las tendencias. 
 
 ```{r precip_tau}
 # -----------------------------------------------------------
@@ -93,7 +93,7 @@ Caracterizaci?n de las tendencias.
 #### Precipitacion 
 p_precip_sn <- filter(p_precip, pn > 0) 
 
-# 1 # ??Como es la tendencia en la precipitaci?n para SN? 
+# 1 # ??Como es la tendencia en la precipitación para SN? 
 
 # 1 a # Tau positivo
 # How many pixels have a positive trend? (positive tau values = have increased the precipitation value) 
@@ -131,7 +131,7 @@ Algunos ***resultados sobre las tendencias***:
 * `r nrow(p_precip_sn[p_precip_sn$tau<0,])` pixeles (`r (nrow(p_precip_sn[p_precip_sn$tau<0,])/nrow(p_precip_sn))*100` %) presentan una tendencia negativa. Existen `r nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))` pixeles con `tau < 0` y `pvalue < 0.05`, lo que representa un `r (nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))/nrow(filter(p_precip_sn, tau < 0)))*100` % del total de los pixels con tau negativo y un `r (nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))/nrow(p_precip_sn))*100` % del total de pixeles para Sierra Nevada. 
  
 
-Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio `alpha < 0.05`, y observamos la distribuci?n de frecuencias en los tau para ambas categorias. 
+Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio `alpha < 0.05`, y observamos la distribución de frecuencias en los tau para ambas categorias. 
 
 ```{r precip_tau_plot}
 # 2 # Categorizacion de las tendencias 
@@ -144,7 +144,7 @@ ggplot(p_precip_sn, aes(x=tau)) + geom_histogram(stat='bin', bindwidth=.1, fill=
 ```
 
 
-Evaluamos la relaci?n entre la elevaci?n y el valor de tau en los pixeles con el objetivo de ver grupos de elevaciones homog?neos. 
+Evaluamos la relación entre la elevación y el valor de tau en los pixeles con el objetivo de ver grupos de elevaciones homogéneos. 
 ```{r precip_tau_cart}
 # 3 # Relaci??n de las tendencias con la elevaci??n (CART)
 fit <- ctree(tau~elev, data=p_precip_sn)
@@ -152,7 +152,7 @@ fit
 plot(fit)
 ```
 
-Realizamos una clasificaci?n de las elevaciones en grupos de 500 metros y obtenemos los estadisticos descriptivos por categor?a de elevaci?n. 
+Realizamos una clasificación de las elevaciones en grupos de 500 metros y obtenemos los estadísticos descriptivos por categoría de elevación. 
 ```{r precip_tau_summary}
 # 4 # Categorizacion de las elevaciones 
 # Clasificacion elevaciones
@@ -186,7 +186,7 @@ options(width=120)
 summa_p_precip_sn
 ```
 
-Finalmente realizamos un plot combinado en el que mostramos el valor promedio de tau para los pixeles de la misma categor?a de elevaci?n, as? como el porcentaje de pixeles con tendencias significativas por categor?a de elevaci?n. 
+Finalmente realizamos un plot combinado en el que mostramos el valor promedio de tau para los pixeles de la misma categoría de elevación, así como el porcentaje de pixeles con tendencias significativas por categoría de elevación. 
 ```{r precip_combined_plot, fig.height=10}
 # 5 # Plot combinado (Ojo solo los significativos). 
 df.precip <- summa_p_precip_sn[summa_p_precip_sn$sig == 'sig',]
@@ -213,7 +213,7 @@ grid.arrange(arrangeGrob(g.top.precip, g.bottom.precip, ncol=1, nrow=2, heights 
 Tmax 
 --- 
 
-Caracterizaci?n de las tendencias. 
+Caracterización de las tendencias. 
 
 ```{r tmax_tau}
 # -----------------------------------------------------------
@@ -258,7 +258,7 @@ Algunos ***resultados sobre las tendencias***:
 * `r nrow(p_tmax_sn[p_tmax_sn$tau<0,])` pixeles (`r (nrow(p_tmax_sn[p_tmax_sn$tau<0,])/nrow(p_tmax_sn))*100` %) presentan una tendencia negativa. Existen `r nrow(filter(p_tmax_sn, tau < 0, p_value < 0.05))` pixeles con `tau < 0` y `pvalue < 0.05`, lo que representa un `r (nrow(filter(p_tmax_sn, tau < 0, p_value < 0.05))/nrow(filter(p_tmax_sn, tau < 0)))*100` % del total de los pixels con tau negativo y un `r (nrow(filter(p_tmax_sn, tau < 0, p_value < 0.05))/nrow(p_tmax_sn))*100` % del total de pixeles para Sierra Nevada. 
                                                                                                           
 
-Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio `alpha < 0.05`, y observamos la distribuci?n de frecuencias en los tau para ambas categorias. 
+Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio `alpha < 0.05`, y observamos la distribución de frecuencias en los tau para ambas categorias. 
 
 ```{r tmax_tau_plot}
 # 2 # Categorizacion de las tendencias 
@@ -271,7 +271,7 @@ ggplot(p_tmax_sn, aes(x=tau)) + geom_histogram(stat='bin', bindwidth=.1, fill='g
 ```
 
 
-Evaluamos la relaci?n entre la elevaci?n y el valor de tau en los pixeles con el objetivo de ver grupos de elevaciones homog?neos. 
+Evaluamos la relación entre la elevación y el valor de tau en los pixeles con el objetivo de ver grupos de elevaciones homog?neos. 
 ```{r tmax_tau_cart}
 # 3 # Relaci??n de las tendencias con la elevaci??n (CART)
 fit <- ctree(tau~elev, data=p_tmax_sn)
@@ -279,7 +279,7 @@ fit
 plot(fit)
 ```
 
-Realizamos una clasificaci?n de las elevaciones en grupos de 500 metros y obtenemos los estadisticos descriptivos por categor?a de elevaci?n. 
+Realizamos una clasificación de las elevaciones en grupos de 500 metros y obtenemos los estadisticos descriptivos por categoría de elevación. 
 ```{r tmax_tau_summary}
 # 4 # Categorizacion de las elevaciones 
 # Clasificacion elevaciones
@@ -313,7 +313,7 @@ options(width=120)
 summa_p_tmax_sn
 ```
 
-Finalmente realizamos un plot combinado en el que mostramos el valor promedio de tau para los pixeles de la misma categor?a de elevaci?n, as? como el porcentaje de pixeles con tendencias significativas por categor?a de elevaci?n. 
+Finalmente realizamos un plot combinado en el que mostramos el valor promedio de tau para los pixeles de la misma categoría de elevación, así como el porcentaje de pixeles con tendencias significativas por categoría de elevación. 
 ```{r tmax_combined_plot, fig.height=10} 
 # 5 # Plot combinado (Ojo solo los significativos). 
 df.tmax <- summa_p_tmax_sn[summa_p_tmax_sn$sig == 'sig',]
@@ -341,7 +341,7 @@ grid.arrange(arrangeGrob(g.top.tmax, g.bottom.tmax, ncol=1, nrow=2, heights = c(
 Tmin 
 --- 
 
-Caracterizaci?n de las tendencias. 
+Caracterización de las tendencias. 
 
 ```{r tmin_tau}
 # Tmin
@@ -384,7 +384,7 @@ Algunos ***resultados sobre las tendencias***:
 * `r nrow(p_tmin_sn[p_tmin_sn$tau<0,])` pixeles (`r (nrow(p_tmin_sn[p_tmin_sn$tau<0,])/nrow(p_tmin_sn))*100` %) presentan una tendencia negativa. Existen `r nrow(filter(p_tmin_sn, tau < 0, p_value < 0.05))` pixeles con `tau < 0` y `pvalue < 0.05`, lo que representa un `r (nrow(filter(p_tmin_sn, tau < 0, p_value < 0.05))/nrow(filter(p_tmin_sn, tau < 0)))*100` % del total de los pixels con tau negativo y un `r (nrow(filter(p_tmin_sn, tau < 0, p_value < 0.05))/nrow(p_tmin_sn))*100` % del total de pixeles para Sierra Nevada. 
                                                                                                                                                                                                      
 
-Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio `alpha < 0.05`, y observamos la distribuci?n de frecuencias en los tau para ambas categorias. 
+Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio `alpha < 0.05`, y observamos la distribución de frecuencias en los tau para ambas categorias. 
 
 ```{r tmin_tau_plot}
 # 2 # Categorizacion de las tendencias 
@@ -397,7 +397,7 @@ ggplot(p_tmin_sn, aes(x=tau)) + geom_histogram(stat='bin', bindwidth=.1, fill='g
 ```
 
 
-Evaluamos la relaci?n entre la elevaci?n y el valor de tau en los pixeles con el objetivo de ver grupos de elevaciones homog?neos. 
+Evaluamos la relación entre la elevación y el valor de tau en los pixeles con el objetivo de ver grupos de elevaciones homog?neos. 
 ```{r tmin_tau_cart}
 # 3 # Relaci??n de las tendencias con la elevaci??n (CART)
 fit <- ctree(tau~elev, data=p_tmin_sn)
@@ -405,7 +405,7 @@ fit
 plot(fit)
 ```
 
-Realizamos una clasificaci?n de las elevaciones en grupos de 500 metros y obtenemos los estadisticos descriptivos por categor?a de elevaci?n. 
+Realizamos una clasificación de las elevaciones en grupos de 500 metros y obtenemos los estadisticos descriptivos por categoría de elevación. 
 ```{r tmin_tau_summary}
 # 4 # Categorizacion de las elevaciones 
 # Clasificacion elevaciones
@@ -439,7 +439,7 @@ options(width=120)
 summa_p_tmin_sn
 ```
 
-Finalmente realizamos un plot combinado en el que mostramos el valor promedio de tau para los pixeles de la misma categor?a de elevaci?n, as? como el porcentaje de pixeles con tendencias significativas por categor?a de elevaci?n. 
+Finalmente realizamos un plot combinado en el que mostramos el valor promedio de tau para los pixeles de la misma categoría de elevación, así como el porcentaje de pixeles con tendencias significativas por categoría de elevación. 
 ```{r tmin_combined_plot, fig.height=10}
 # 5 # Plot combinado (Ojo solo los significativos). 
 df.tmin <- summa_p_tmin_sn[summa_p_tmin_sn$sig == 'sig',]

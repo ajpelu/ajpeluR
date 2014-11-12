@@ -1,4 +1,4 @@
-An?lisis datos de clima del pasado
+Análisis datos de clima del pasado
 ==================================
 
 ``` r
@@ -36,12 +36,12 @@ Preparamos datos
 
 Vamos a cargar los archivos de datos del pasado para las tres variables: `precip`, `tmax` y `tmin`. Para cada pixel y por cada variable tenemos varios atributos:
 
--   **Estad?stico tau** (Mann-Kendall Trend Analysis). Su valor var?a entre `-1` y `1`
+-   **Estadístico tau** (Mann-Kendall Trend Analysis). Su valor varía entre `-1` y `1`
 -   ***p-value***
--   elevaci?n
+-   elevación
 -   pertenencia a espacio natural
 
-En este an?lisis nos centramos solamente en los pixeles que pertenecen a Sierra Nevada
+En este análisis nos centramos solamente en los pixeles que pertenecen a Sierra Nevada
 
 ``` r
 # -----------------------------------------------------------
@@ -73,10 +73,10 @@ p_tmin <- join(past_tmin, eleven, type='inner', by='cli_celda_id')
 # -----------------------------------------------------------
 ```
 
-Precipitaci?n
+Precipitación
 -------------
 
-Caracterizaci?n de las tendencias.
+Caracterización de las tendencias.
 
 ``` r
 # -----------------------------------------------------------
@@ -85,7 +85,7 @@ Caracterizaci?n de las tendencias.
 #### Precipitacion 
 p_precip_sn <- filter(p_precip, pn > 0) 
 
-# 1 # ??Como es la tendencia en la precipitaci?n para SN? 
+# 1 # ??Como es la tendencia en la precipitación para SN? 
 
 # 1 a # Tau positivo
 # How many pixels have a positive trend? (positive tau values = have increased the precipitation value) 
@@ -163,7 +163,7 @@ Algunos ***resultados sobre las tendencias***:
 -   298 pixeles (0.1734 %) presentan una tendencia positiva. Existen 0 con `tau > 0` y `pvalue < 0.05` (significativos), lo que representa un 0 % del total de los pixels con tau positivo y un 0 % del total de pixeles para Sierra Nevada.
 -   171460 pixeles (99.7945 %) presentan una tendencia negativa. Existen 74516 pixeles con `tau < 0` y `pvalue < 0.05`, lo que representa un 43.4597 % del total de los pixels con tau negativo y un 43.3704 % del total de pixeles para Sierra Nevada.
 
-Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio `alpha < 0.05`, y observamos la distribuci?n de frecuencias en los tau para ambas categorias.
+Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio `alpha < 0.05`, y observamos la distribución de frecuencias en los tau para ambas categorias.
 
 ``` r
 # 2 # Categorizacion de las tendencias 
@@ -180,7 +180,7 @@ ggplot(p_precip_sn, aes(x=tau)) + geom_histogram(stat='bin', bindwidth=.1, fill=
 
 ![plot of chunk precip\_tau\_plot](./trend_past_climate_files/figure-markdown_github/precip_tau_plot.png)
 
-Evaluamos la relaci?n entre la elevaci?n y el valor de tau en los pixeles con el objetivo de ver grupos de elevaciones homog?neos.
+Evaluamos la relación entre la elevación y el valor de tau en los pixeles con el objetivo de ver grupos de elevaciones homogéneos.
 
 ``` r
 # 3 # Relaci??n de las tendencias con la elevaci??n (CART)
@@ -275,7 +275,7 @@ plot(fit)
 
 ![plot of chunk precip\_tau\_cart](./trend_past_climate_files/figure-markdown_github/precip_tau_cart.png)
 
-Realizamos una clasificaci?n de las elevaciones en grupos de 500 metros y obtenemos los estadisticos descriptivos por categor?a de elevaci?n.
+Realizamos una clasificación de las elevaciones en grupos de 500 metros y obtenemos los estadísticos descriptivos por categoría de elevación.
 
 ``` r
 # 4 # Categorizacion de las elevaciones 
@@ -326,7 +326,7 @@ summa_p_precip_sn
     ## 13 3001-3500 no sig     0      NaN      NaN       NaN         2226         -0.2998       0.06301     0.0013355    0.00
     ## 14 3001-3500    sig  2226 -0.29985 0.063009 0.0013355         2226         -0.2998       0.06301     0.0013355  100.00
 
-Finalmente realizamos un plot combinado en el que mostramos el valor promedio de tau para los pixeles de la misma categor?a de elevaci?n, as? como el porcentaje de pixeles con tendencias significativas por categor?a de elevaci?n.
+Finalmente realizamos un plot combinado en el que mostramos el valor promedio de tau para los pixeles de la misma categoría de elevación, así como el porcentaje de pixeles con tendencias significativas por categoría de elevación.
 
 ``` r
 # 5 # Plot combinado (Ojo solo los significativos). 
@@ -356,7 +356,7 @@ grid.arrange(arrangeGrob(g.top.precip, g.bottom.precip, ncol=1, nrow=2, heights 
 Tmax
 ----
 
-Caracterizaci?n de las tendencias.
+Caracterización de las tendencias.
 
 ``` r
 # -----------------------------------------------------------
@@ -441,7 +441,7 @@ Algunos ***resultados sobre las tendencias***:
 -   141757 pixeles (82.5066 %) presentan una tendencia positiva. Existen 23417 con `tau > 0` y `pvalue < 0.05` (significativos), lo que representa un 16.5191 % del total de los pixels con tau positivo y un 13.6294 % del total de pixeles para Sierra Nevada.
 -   29551 pixeles (17.1995 %) presentan una tendencia negativa. Existen 0 pixeles con `tau < 0` y `pvalue < 0.05`, lo que representa un 0 % del total de los pixels con tau negativo y un 0 % del total de pixeles para Sierra Nevada.
 
-Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio `alpha < 0.05`, y observamos la distribuci?n de frecuencias en los tau para ambas categorias.
+Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio `alpha < 0.05`, y observamos la distribución de frecuencias en los tau para ambas categorias.
 
 ``` r
 # 2 # Categorizacion de las tendencias 
@@ -458,7 +458,7 @@ ggplot(p_tmax_sn, aes(x=tau)) + geom_histogram(stat='bin', bindwidth=.1, fill='g
 
 ![plot of chunk tmax\_tau\_plot](./trend_past_climate_files/figure-markdown_github/tmax_tau_plot.png)
 
-Evaluamos la relaci?n entre la elevaci?n y el valor de tau en los pixeles con el objetivo de ver grupos de elevaciones homog?neos.
+Evaluamos la relación entre la elevación y el valor de tau en los pixeles con el objetivo de ver grupos de elevaciones homog?neos.
 
 ``` r
 # 3 # Relaci??n de las tendencias con la elevaci??n (CART)
@@ -592,7 +592,7 @@ plot(fit)
 
 ![plot of chunk tmax\_tau\_cart](./trend_past_climate_files/figure-markdown_github/tmax_tau_cart.png)
 
-Realizamos una clasificaci?n de las elevaciones en grupos de 500 metros y obtenemos los estadisticos descriptivos por categor?a de elevaci?n.
+Realizamos una clasificación de las elevaciones en grupos de 500 metros y obtenemos los estadisticos descriptivos por categoría de elevación.
 
 ``` r
 # 4 # Categorizacion de las elevaciones 
@@ -643,7 +643,7 @@ summa_p_tmax_sn
     ## 13 3001-3500 no sig  2226 0.02126 0.021365 4.528e-04         2226         0.02126      0.021365     0.0004528 100.0000
     ## 14 3001-3500    sig     0     NaN      NaN       NaN         2226         0.02126      0.021365     0.0004528   0.0000
 
-Finalmente realizamos un plot combinado en el que mostramos el valor promedio de tau para los pixeles de la misma categor?a de elevaci?n, as? como el porcentaje de pixeles con tendencias significativas por categor?a de elevaci?n.
+Finalmente realizamos un plot combinado en el que mostramos el valor promedio de tau para los pixeles de la misma categoría de elevación, así como el porcentaje de pixeles con tendencias significativas por categoría de elevación.
 
 ``` r
 # 5 # Plot combinado (Ojo solo los significativos). 
@@ -674,7 +674,7 @@ grid.arrange(arrangeGrob(g.top.tmax, g.bottom.tmax, ncol=1, nrow=2, heights = c(
 Tmin
 ----
 
-Caracterizaci?n de las tendencias.
+Caracterización de las tendencias.
 
 ``` r
 # Tmin
@@ -758,7 +758,7 @@ Algunos ***resultados sobre las tendencias***:
 -   129759 pixeles (75.5234 %) presentan una tendencia positiva. Existen 7 con `tau > 0` y `pvalue < 0.05` (significativos), lo que representa un 0.0054 % del total de los pixels con tau positivo y un 0.0041 % del total de pixeles para Sierra Nevada.
 -   41762 pixeles (24.3067 %) presentan una tendencia negativa. Existen 0 pixeles con `tau < 0` y `pvalue < 0.05`, lo que representa un 0 % del total de los pixels con tau negativo y un 0 % del total de pixeles para Sierra Nevada.
 
-Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio `alpha < 0.05`, y observamos la distribuci?n de frecuencias en los tau para ambas categorias.
+Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio `alpha < 0.05`, y observamos la distribución de frecuencias en los tau para ambas categorias.
 
 ``` r
 # 2 # Categorizacion de las tendencias 
@@ -775,7 +775,7 @@ ggplot(p_tmin_sn, aes(x=tau)) + geom_histogram(stat='bin', bindwidth=.1, fill='g
 
 ![plot of chunk tmin\_tau\_plot](./trend_past_climate_files/figure-markdown_github/tmin_tau_plot.png)
 
-Evaluamos la relaci?n entre la elevaci?n y el valor de tau en los pixeles con el objetivo de ver grupos de elevaciones homog?neos.
+Evaluamos la relación entre la elevación y el valor de tau en los pixeles con el objetivo de ver grupos de elevaciones homog?neos.
 
 ``` r
 # 3 # Relaci??n de las tendencias con la elevaci??n (CART)
@@ -858,7 +858,7 @@ plot(fit)
 
 ![plot of chunk tmin\_tau\_cart](./trend_past_climate_files/figure-markdown_github/tmin_tau_cart.png)
 
-Realizamos una clasificaci?n de las elevaciones en grupos de 500 metros y obtenemos los estadisticos descriptivos por categor?a de elevaci?n.
+Realizamos una clasificación de las elevaciones en grupos de 500 metros y obtenemos los estadisticos descriptivos por categoría de elevación.
 
 ``` r
 # 4 # Categorizacion de las elevaciones 
@@ -909,7 +909,7 @@ summa_p_tmin_sn
     ## 13 3001-3500 no sig  2226 -0.03907 0.0314336 0.0006662         2226        -0.03907      0.031434     0.0006662  100.00
     ## 14 3001-3500    sig     0      NaN       NaN       NaN         2226        -0.03907      0.031434     0.0006662    0.00
 
-Finalmente realizamos un plot combinado en el que mostramos el valor promedio de tau para los pixeles de la misma categor?a de elevaci?n, as? como el porcentaje de pixeles con tendencias significativas por categor?a de elevaci?n.
+Finalmente realizamos un plot combinado en el que mostramos el valor promedio de tau para los pixeles de la misma categoría de elevación, así como el porcentaje de pixeles con tendencias significativas por categoría de elevación.
 
 ``` r
 # 5 # Plot combinado (Ojo solo los significativos). 
