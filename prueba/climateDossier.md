@@ -886,41 +886,26 @@ aux1.tmin <- ddply(p_tmin_sn, c('elevC'), summarise,
                    se.group.elev = sd.group.elev / sqrt (n.group.elev))
 
 summa_p_tmin_sn <- join(aux.tmin, aux1.tmin, type='full', by='elevC', match='all')
-summa_p_tmin_sn$per.sig <- ( summa_p_tmin_sn$n / summa_p_tmin_sn$n.group.elev )*100
+summa_p_tmin_sn$per.sig <- round((summa_p_tmin_sn$n / summa_p_tmin_sn$n.group.elev )*100,2)
 options(width=120)
 summa_p_tmin_sn
 ```
 
-    ##        elevC    sig     n     mean        sd        se n.group.elev mean.group.elev sd.group.elev se.group.elev
-    ## 1      0-500 no sig  2642  0.04847 0.0096613 0.0001880         2642         0.04847      0.009661     0.0001880
-    ## 2      0-500    sig     0      NaN       NaN       NaN         2642         0.04847      0.009661     0.0001880
-    ## 3   501-1000 no sig 15246  0.06930 0.0314169 0.0002544        15246         0.06930      0.031417     0.0002544
-    ## 4   501-1000    sig     0      NaN       NaN       NaN        15246         0.06930      0.031417     0.0002544
-    ## 5  1001-1500 no sig 43619  0.07538 0.0589882 0.0002824        43619         0.07538      0.058988     0.0002824
-    ## 6  1001-1500    sig     0      NaN       NaN       NaN        43619         0.07538      0.058988     0.0002824
-    ## 7  1501-2000 no sig 55578  0.07134 0.0699646 0.0002968        55585         0.07135      0.069973     0.0002968
-    ## 8  1501-2000    sig     7  0.19270 0.0008692 0.0003285        55585         0.07135      0.069973     0.0002968
-    ## 9  2001-2500 no sig 35933  0.04297 0.0749572 0.0003954        35933         0.04297      0.074957     0.0003954
-    ## 10 2001-2500    sig     0      NaN       NaN       NaN        35933         0.04297      0.074957     0.0003954
-    ## 11 2501-3000 no sig 16562 -0.01004 0.0522267 0.0004058        16562        -0.01004      0.052227     0.0004058
-    ## 12 2501-3000    sig     0      NaN       NaN       NaN        16562        -0.01004      0.052227     0.0004058
-    ## 13 3001-3500 no sig  2226 -0.03907 0.0314336 0.0006662         2226        -0.03907      0.031434     0.0006662
-    ## 14 3001-3500    sig     0      NaN       NaN       NaN         2226        -0.03907      0.031434     0.0006662
-    ##      per.sig
-    ## 1  100.00000
-    ## 2    0.00000
-    ## 3  100.00000
-    ## 4    0.00000
-    ## 5  100.00000
-    ## 6    0.00000
-    ## 7   99.98741
-    ## 8    0.01259
-    ## 9  100.00000
-    ## 10   0.00000
-    ## 11 100.00000
-    ## 12   0.00000
-    ## 13 100.00000
-    ## 14   0.00000
+    ##        elevC    sig     n     mean        sd        se n.group.elev mean.group.elev sd.group.elev se.group.elev per.sig
+    ## 1      0-500 no sig  2642  0.04847 0.0096613 0.0001880         2642         0.04847      0.009661     0.0001880  100.00
+    ## 2      0-500    sig     0      NaN       NaN       NaN         2642         0.04847      0.009661     0.0001880    0.00
+    ## 3   501-1000 no sig 15246  0.06930 0.0314169 0.0002544        15246         0.06930      0.031417     0.0002544  100.00
+    ## 4   501-1000    sig     0      NaN       NaN       NaN        15246         0.06930      0.031417     0.0002544    0.00
+    ## 5  1001-1500 no sig 43619  0.07538 0.0589882 0.0002824        43619         0.07538      0.058988     0.0002824  100.00
+    ## 6  1001-1500    sig     0      NaN       NaN       NaN        43619         0.07538      0.058988     0.0002824    0.00
+    ## 7  1501-2000 no sig 55578  0.07134 0.0699646 0.0002968        55585         0.07135      0.069973     0.0002968   99.99
+    ## 8  1501-2000    sig     7  0.19270 0.0008692 0.0003285        55585         0.07135      0.069973     0.0002968    0.01
+    ## 9  2001-2500 no sig 35933  0.04297 0.0749572 0.0003954        35933         0.04297      0.074957     0.0003954  100.00
+    ## 10 2001-2500    sig     0      NaN       NaN       NaN        35933         0.04297      0.074957     0.0003954    0.00
+    ## 11 2501-3000 no sig 16562 -0.01004 0.0522267 0.0004058        16562        -0.01004      0.052227     0.0004058  100.00
+    ## 12 2501-3000    sig     0      NaN       NaN       NaN        16562        -0.01004      0.052227     0.0004058    0.00
+    ## 13 3001-3500 no sig  2226 -0.03907 0.0314336 0.0006662         2226        -0.03907      0.031434     0.0006662  100.00
+    ## 14 3001-3500    sig     0      NaN       NaN       NaN         2226        -0.03907      0.031434     0.0006662    0.00
 
 Finalmente realizamos un plot combinado en el que mostramos el valor promedio de tau para los pixeles de la misma categoría de elevación, así como el porcentaje de pixeles con tendencias significativas por categoría de elevación.
 
@@ -952,3 +937,10 @@ grid.arrange(arrangeGrob(g.top.tmin, g.bottom.tmin, ncol=1, nrow=2, heights = c(
 ```
 
 ![plot of chunk tmin\_combined\_plot](./climateDossier_files/figure-markdown_github/tmin_combined_plot2.png)
+
+Tabla resumen
+
+| Variable | tendencia | n   | %      | sig. | % de los tau. | % de los totales |
+|----------|-----------|-----|--------|------|---------------|------------------|
+| precip   | tau \> 0  | 298 | 0.1734 | 0    | 0             |                  |
+| precip   | tau \< 0  |     |        |      |               |                  |
