@@ -474,10 +474,12 @@ Tabla resumen
 
 
 Ahora todos los plots combinados 
-```{r plotCombinados}
-grid.arrange(arrangeGrob(g.top.precip, g.top.tmax, g.top.tmin, g.bottom.precip, g.bottom.tmax, g.bottom.tmin, ncol=3, nrow=2, heights = c(1/5, 4/5)))
+```{r plotCombinados, fig.height=12, fig.width=10}
+gbtmax <- g.bottom.tmax + ylim(-0.3,.3)
+gbtmin <- g.bottom.tmin + ylim(-0.3,.3)
+gbprecip <- g.bottom.precip + ylim(-0.3,.3)
+
+grid.arrange(arrangeGrob(g.top.precip, g.top.tmax, g.top.tmin, gbprecip, gbtmax, gbtmin, ncol=3, nrow=2, heights = c(1/5, 4/5)))
 ```
-
-
 
 
