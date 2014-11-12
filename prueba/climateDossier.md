@@ -36,9 +36,12 @@ Preparamos datos
 
 Vamos a cargar los archivos de datos del pasado para las tres variables: `precip`, `tmax` y `tmin`. Para cada pixel y por cada variable tenemos varios atributos:
 
-NA \* ***p-value*** NA \* pertenencia a espacio natural
+-   **Estadístico \(\tau\)** (Mann-Kendall Trend Analysis). Su valor varía entre `-1` y `1`
+-   ***p-value***
+-   elevación
+-   pertenencia a espacio natural
 
-NA
+En este análisis nos centramos solamente en los pixeles que pertenecen a Sierra Nevada
 
 ``` r
 # -----------------------------------------------------------
@@ -70,10 +73,10 @@ p_tmin <- join(past_tmin, eleven, type='inner', by='cli_celda_id')
 # -----------------------------------------------------------
 ```
 
-NA
---
+Precipitación
+-------------
 
-NA
+Caracterización de las tendencias.
 
 ``` r
 # -----------------------------------------------------------
@@ -82,7 +85,7 @@ NA
 #### Precipitacion 
 p_precip_sn <- filter(p_precip, pn > 0) 
 
-NA
+# 1 # ¿¿Como es la tendencia en la precipitación para SN? 
 
 # 1 a # Tau positivo
 # How many pixels have a positive trend? (positive tau values = have increased the precipitation value) 
@@ -157,7 +160,7 @@ nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))
 
 Algunos datos: - 298 pixeles (0.1734 %) presentan una tendencia positiva. Existen 0 pixeles con \(\tau > 0\) y `pvalue < 0.05`, lo que representa un 0 % del total de los pixels con \(\tau\) positivo y un 0 % del total de pixeles para Sierra Nevada. - 171460 pixeles (99.7945 %) presentan una tendencia negativa. Existen 74516 pixeles con \(\tau < 0\) y `pvalue < 0.05`, lo que representa un 43.4597 % del total de los pixels con \(\tau\) negativo y un 43.3704 % del total de pixeles para Sierra Nevada.
 
-NA
+Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio \(\alpha=0.05\), y observamos la distribución de frecuencias en los \(\tau\) para ambas categorias.
 
 ``` r
 # 2 # Categorizacion de las tendencias 
@@ -174,7 +177,7 @@ ggplot(p_precip_sn, aes(x=tau)) + geom_histogram(stat='bin', bindwidth=.1, fill=
 
 ![plot of chunk precip\_tau\_plot](./climateDossier_files/figure-markdown_github/precip_tau_plot.png)
 
-NA
+Evaluamos la relación entre la elevación y el valor de \(\tau\) en los pixeles con el objetivo de ver grupos de elevaciones homogéneos.
 
 ``` r
 # 3 # Relaci??n de las tendencias con la elevaci??n (CART)
@@ -269,7 +272,7 @@ plot(fit)
 
 ![plot of chunk precip\_tau\_cart](./climateDossier_files/figure-markdown_github/precip_tau_cart.png)
 
-NA
+Realizamos una clasificación de las elevaciones en grupos de 500 metros y obtenemos los estadisticos descriptivos por categoría de elevación.
 
 ``` r
 # 4 # Categorizacion de las elevaciones 
@@ -334,7 +337,7 @@ summa_p_precip_sn
     ## 13         -0.2998       0.06301     0.0013355    0.00
     ## 14         -0.2998       0.06301     0.0013355  100.00
 
-NA
+Finalmente realizamos un plot combinado en el que mostramos el valor promedio de \(\tau\) para los pixeles de la misma categoría de elevación, así como el porcentaje de pixeles con tendencias significativas por categoría de elevación.
 
 ``` r
 # 5 # Plot combinado (Ojo solo los significativos). 
