@@ -1,5 +1,5 @@
-Analisis del clima pasado y futuro para el dossier. Preparacion de los datos
-============================================================================
+Análisis datos de clima del pasado
+==================================
 
 ``` r
 # -----------------------------------------------------------
@@ -158,12 +158,12 @@ nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))
 
     ## [1] 43.37
 
-Algunos datos:
+Algunos ***resultados sobre las tendencias***:
 
 -   298 pixeles (0.1734 %) presentan una tendencia positiva. Existen 0 pixeles con \(\tau > 0\) y `pvalue < 0.05`, lo que representa un 0 % del total de los pixels con \(\tau\) positivo y un 0 % del total de pixeles para Sierra Nevada.
 -   171460 pixeles (99.7945 %) presentan una tendencia negativa. Existen 74516 pixeles con \(\tau < 0\) y `pvalue < 0.05`, lo que representa un 43.4597 % del total de los pixels con \(\tau\) negativo y un 43.3704 % del total de pixeles para Sierra Nevada.
 
-Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio \(\alpha=0.05\), y observamos la distribución de frecuencias en los \[\tau\] para ambas categorias.
+Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio \(\alpha=0.05\), y observamos la distribución de frecuencias en los \(\\tau\) para ambas categorias.
 
 ``` r
 # 2 # Categorizacion de las tendencias 
