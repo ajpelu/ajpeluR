@@ -36,9 +36,9 @@ Preparamos datos
 
 Vamos a cargar los archivos de datos del pasado para las tres variables: `precip`, `tmax` y `tmin`. Para cada pixel y por cada variable tenemos varios atributos:
 
--   **Estadístico \(\tau\) ** (Mann-Kendall Trend Analysis). Su valor varía entre `-1` y `1`
+-   **Estadístico** tau (Mann-Kendall Trend Analysis). Su valor varía entre `-1` y `1`
 -   ***p-value***
--   elevación `tex \tau`
+-   elevación
 -   pertenencia a espacio natural
 
 En este análisis nos centramos solamente en los pixeles que pertenecen a Sierra Nevada
@@ -160,10 +160,10 @@ nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))
 
 Algunos ***resultados sobre las tendencias***:
 
--   298 pixeles (0.1734 %) presentan una tendencia positiva. Existen 0 pixeles con \(\tau > 0\) y `pvalue < 0.05`, lo que representa un 0 % del total de los pixels con \(\tau\) positivo y un 0 % del total de pixeles para Sierra Nevada.
--   171460 pixeles (99.7945 %) presentan una tendencia negativa. Existen 74516 pixeles con \(\tau < 0\) y `pvalue < 0.05`, lo que representa un 43.4597 % del total de los pixels con \(\tau\) negativo y un 43.3704 % del total de pixeles para Sierra Nevada.
+-   298 pixeles (0.1734 %) presentan una tendencia positiva. Existen 0 pixeles con `tau > 0` y `pvalue < 0.05`, lo que representa un 0 % del total de los pixels con tau positivo y un 0 % del total de pixeles para Sierra Nevada.
+-   171460 pixeles (99.7945 %) presentan una tendencia negativa. Existen 74516 pixeles con `tau < 0` y `pvalue < 0.05`, lo que representa un 43.4597 % del total de los pixels con tau negativo y un 43.3704 % del total de pixeles para Sierra Nevada.
 
-Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio \(\alpha=0.05\), y observamos la distribución de frecuencias en los \(\\tau\) para ambas categorias.
+Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio `alpha < 0.05`, y observamos la distribución de frecuencias en los tau para ambas categorias.
 
 ``` r
 # 2 # Categorizacion de las tendencias 
@@ -180,7 +180,7 @@ ggplot(p_precip_sn, aes(x=tau)) + geom_histogram(stat='bin', bindwidth=.1, fill=
 
 ![plot of chunk precip\_tau\_plot](./climateDossier_files/figure-markdown_github/precip_tau_plot.png)
 
-Evaluamos la relación entre la elevación y el valor de \(\tau\) en los pixeles con el objetivo de ver grupos de elevaciones homogéneos.
+Evaluamos la relación entre la elevación y el valor de tau en los pixeles con el objetivo de ver grupos de elevaciones homogéneos.
 
 ``` r
 # 3 # Relaci??n de las tendencias con la elevaci??n (CART)
@@ -306,41 +306,27 @@ aux1.prec <- ddply(p_precip_sn, c('elevC'), summarise,
 
 summa_p_precip_sn <- join(aux.prec, aux1.prec, type='full', by='elevC', match='all')
 summa_p_precip_sn$per.sig <- ( summa_p_precip_sn$n / summa_p_precip_sn$n.group.elev )*100
+options(width=120)
 summa_p_precip_sn
 ```
 
-    ##        elevC    sig     n     mean       sd        se n.group.elev
-    ## 1      0-500 no sig   985 -0.17408 0.012650 0.0004031         2642
-    ## 2      0-500    sig  1657 -0.19961 0.005203 0.0001278         2642
-    ## 3   501-1000 no sig 12687 -0.11567 0.035046 0.0003111        15246
-    ## 4   501-1000    sig  2559 -0.31823 0.036439 0.0007203        15246
-    ## 5  1001-1500 no sig 28509 -0.08792 0.036492 0.0002161        43619
-    ## 6  1001-1500    sig 15110 -0.32632 0.065302 0.0005312        43619
-    ## 7  1501-2000 no sig 33345 -0.08107 0.048080 0.0002633        55585
-    ## 8  1501-2000    sig 22240 -0.31941 0.075526 0.0005064        55585
-    ## 9  2001-2500 no sig 17154 -0.07248 0.052140 0.0003981        35933
-    ## 10 2001-2500    sig 18779 -0.31511 0.073221 0.0005343        35933
-    ## 11 2501-3000 no sig  4617 -0.12763 0.049188 0.0007239        16562
-    ## 12 2501-3000    sig 11945 -0.32005 0.072307 0.0006616        16562
-    ## 13 3001-3500 no sig     0      NaN      NaN       NaN         2226
-    ## 14 3001-3500    sig  2226 -0.29985 0.063009 0.0013355         2226
-    ##    mean.group.elev sd.group.elev se.group.elev per.sig
-    ## 1          -0.1901       0.01514     0.0002945   37.28
-    ## 2          -0.1901       0.01514     0.0002945   62.72
-    ## 3          -0.1497       0.08352     0.0006764   83.22
-    ## 4          -0.1497       0.08352     0.0006764   16.78
-    ## 5          -0.1705       0.12335     0.0005906   65.36
-    ## 6          -0.1705       0.12335     0.0005906   34.64
-    ## 7          -0.1764       0.13154     0.0005579   59.99
-    ## 8          -0.1764       0.13154     0.0005579   40.01
-    ## 9          -0.1993       0.13706     0.0007231   47.74
-    ## 10         -0.1993       0.13706     0.0007231   52.26
-    ## 11         -0.2664       0.10904     0.0008473   27.88
-    ## 12         -0.2664       0.10904     0.0008473   72.12
-    ## 13         -0.2998       0.06301     0.0013355    0.00
-    ## 14         -0.2998       0.06301     0.0013355  100.00
+    ##        elevC    sig     n     mean       sd        se n.group.elev mean.group.elev sd.group.elev se.group.elev per.sig
+    ## 1      0-500 no sig   985 -0.17408 0.012650 0.0004031         2642         -0.1901       0.01514     0.0002945   37.28
+    ## 2      0-500    sig  1657 -0.19961 0.005203 0.0001278         2642         -0.1901       0.01514     0.0002945   62.72
+    ## 3   501-1000 no sig 12687 -0.11567 0.035046 0.0003111        15246         -0.1497       0.08352     0.0006764   83.22
+    ## 4   501-1000    sig  2559 -0.31823 0.036439 0.0007203        15246         -0.1497       0.08352     0.0006764   16.78
+    ## 5  1001-1500 no sig 28509 -0.08792 0.036492 0.0002161        43619         -0.1705       0.12335     0.0005906   65.36
+    ## 6  1001-1500    sig 15110 -0.32632 0.065302 0.0005312        43619         -0.1705       0.12335     0.0005906   34.64
+    ## 7  1501-2000 no sig 33345 -0.08107 0.048080 0.0002633        55585         -0.1764       0.13154     0.0005579   59.99
+    ## 8  1501-2000    sig 22240 -0.31941 0.075526 0.0005064        55585         -0.1764       0.13154     0.0005579   40.01
+    ## 9  2001-2500 no sig 17154 -0.07248 0.052140 0.0003981        35933         -0.1993       0.13706     0.0007231   47.74
+    ## 10 2001-2500    sig 18779 -0.31511 0.073221 0.0005343        35933         -0.1993       0.13706     0.0007231   52.26
+    ## 11 2501-3000 no sig  4617 -0.12763 0.049188 0.0007239        16562         -0.2664       0.10904     0.0008473   27.88
+    ## 12 2501-3000    sig 11945 -0.32005 0.072307 0.0006616        16562         -0.2664       0.10904     0.0008473   72.12
+    ## 13 3001-3500 no sig     0      NaN      NaN       NaN         2226         -0.2998       0.06301     0.0013355    0.00
+    ## 14 3001-3500    sig  2226 -0.29985 0.063009 0.0013355         2226         -0.2998       0.06301     0.0013355  100.00
 
-Finalmente realizamos un plot combinado en el que mostramos el valor promedio de \(\tau\) para los pixeles de la misma categoría de elevación, así como el porcentaje de pixeles con tendencias significativas por categoría de elevación.
+Finalmente realizamos un plot combinado en el que mostramos el valor promedio de tau para los pixeles de la misma categoría de elevación, así como el porcentaje de pixeles con tendencias significativas por categoría de elevación.
 
 ``` r
 # 5 # Plot combinado (Ojo solo los significativos). 

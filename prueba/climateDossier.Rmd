@@ -43,9 +43,9 @@ Preparamos datos
 ----
 Vamos a cargar los archivos de datos del pasado para las tres variables: `precip`, `tmax` y `tmin`. Para cada pixel y por cada variable tenemos varios atributos:
 
-* **Estadístico $\tau$ ** (Mann-Kendall Trend Analysis). Su valor varía entre `-1` y `1`   
+* **Estadístico** tau (Mann-Kendall Trend Analysis). Su valor varía entre `-1` y `1`   
 * ***p-value*** 
-* elevación `tex \tau`
+* elevación 
 * pertenencia a espacio natural 
 
 En este análisis nos centramos solamente en los pixeles que pertenecen a Sierra Nevada
@@ -127,11 +127,11 @@ nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))
 
 Algunos ***resultados sobre las tendencias***: 
 
-* `r nrow(p_precip_sn[p_precip_sn$tau>0,])` pixeles (`r (nrow(p_precip_sn[p_precip_sn$tau>0,])/nrow(p_precip_sn))*100` %) presentan una tendencia positiva. Existen `r nrow(filter(p_precip_sn, tau > 0, p_value < 0.05))` pixeles con $\tau > 0$ y `pvalue < 0.05`, lo que representa un `r (nrow(filter(p_precip_sn, tau > 0, p_value < 0.05))/nrow(filter(p_precip_sn, tau > 0)))*100` % del total de los pixels con $\tau$ positivo y un `r (nrow(filter(p_precip_sn, tau > 0, p_value < 0.05))/nrow(p_precip_sn))*100` % del total de pixeles para Sierra Nevada. 
-* `r nrow(p_precip_sn[p_precip_sn$tau<0,])` pixeles (`r (nrow(p_precip_sn[p_precip_sn$tau<0,])/nrow(p_precip_sn))*100` %) presentan una tendencia negativa. Existen `r nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))` pixeles con $\tau < 0$ y `pvalue < 0.05`, lo que representa un `r (nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))/nrow(filter(p_precip_sn, tau < 0)))*100` % del total de los pixels con $\tau$ negativo y un `r (nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))/nrow(p_precip_sn))*100` % del total de pixeles para Sierra Nevada. 
+* `r nrow(p_precip_sn[p_precip_sn$tau>0,])` pixeles (`r (nrow(p_precip_sn[p_precip_sn$tau>0,])/nrow(p_precip_sn))*100` %) presentan una tendencia positiva. Existen `r nrow(filter(p_precip_sn, tau > 0, p_value < 0.05))` pixeles con `tau > 0` y `pvalue < 0.05`, lo que representa un `r (nrow(filter(p_precip_sn, tau > 0, p_value < 0.05))/nrow(filter(p_precip_sn, tau > 0)))*100` % del total de los pixels con tau positivo y un `r (nrow(filter(p_precip_sn, tau > 0, p_value < 0.05))/nrow(p_precip_sn))*100` % del total de pixeles para Sierra Nevada. 
+* `r nrow(p_precip_sn[p_precip_sn$tau<0,])` pixeles (`r (nrow(p_precip_sn[p_precip_sn$tau<0,])/nrow(p_precip_sn))*100` %) presentan una tendencia negativa. Existen `r nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))` pixeles con `tau < 0` y `pvalue < 0.05`, lo que representa un `r (nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))/nrow(filter(p_precip_sn, tau < 0)))*100` % del total de los pixels con tau negativo y un `r (nrow(filter(p_precip_sn, tau < 0, p_value < 0.05))/nrow(p_precip_sn))*100` % del total de pixeles para Sierra Nevada. 
  
 
-Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio $\alpha=0.05$, y observamos la distribución de frecuencias en los $\\tau$ para ambas categorias. 
+Seguidamente categorizamos las tendencias en significativas y no significativas usando el criterio `alpha < 0.05`, y observamos la distribución de frecuencias en los tau para ambas categorias. 
 
 ```{r precip_tau_plot}
 # 2 # Categorizacion de las tendencias 
@@ -144,7 +144,7 @@ ggplot(p_precip_sn, aes(x=tau)) + geom_histogram(stat='bin', bindwidth=.1, fill=
 ```
 
 
-Evaluamos la relación entre la elevación y el valor de $\tau$ en los pixeles con el objetivo de ver grupos de elevaciones homogéneos. 
+Evaluamos la relación entre la elevación y el valor de tau en los pixeles con el objetivo de ver grupos de elevaciones homogéneos. 
 ```{r precip_tau_cart}
 # 3 # Relaci??n de las tendencias con la elevaci??n (CART)
 fit <- ctree(tau~elev, data=p_precip_sn)
@@ -182,11 +182,12 @@ aux1.prec <- ddply(p_precip_sn, c('elevC'), summarise,
 
 summa_p_precip_sn <- join(aux.prec, aux1.prec, type='full', by='elevC', match='all')
 summa_p_precip_sn$per.sig <- ( summa_p_precip_sn$n / summa_p_precip_sn$n.group.elev )*100
+options(width=120)
 summa_p_precip_sn
 ```
 
-Finalmente realizamos un plot combinado en el que mostramos el valor promedio de $\tau$ para los pixeles de la misma categoría de elevación, así como el porcentaje de pixeles con tendencias significativas por categoría de elevación. 
-```{r precip_combined_plot}
+Finalmente realizamos un plot combinado en el que mostramos el valor promedio de tau para los pixeles de la misma categoría de elevación, así como el porcentaje de pixeles con tendencias significativas por categoría de elevación. 
+```{r precip_combined_plot, fig.height=8}
 # 5 # Plot combinado (Ojo solo los significativos). 
 df.precip <- summa_p_precip_sn[summa_p_precip_sn$sig == 'sig',]
 g.top.precip <- ggplot(df.precip, aes(x = elevC, y = per.sig)) +
