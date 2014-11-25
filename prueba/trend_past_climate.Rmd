@@ -510,7 +510,7 @@ plot.taus
 ```
 
 Y ahora el porcentaje de pixeles por significativos
-```{r plotSig, fig.height=10, fig.width=5}
+```{r plotSig, fig.height=5, fig.width=4}
 # Plot percentage pixels sig. 
 plot.sig <- ggplot(df, aes(x = elevC, y = per.sig, fill=variable)) +
   geom_bar(stat='identity', position='dodge') + 
