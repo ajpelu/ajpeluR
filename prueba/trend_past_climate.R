@@ -109,10 +109,10 @@ p_precip_sn$elevC <- as.factor(ifelse(p_precip_sn$elev > 3001, '3001-3500',
                             ifelse(p_precip_sn$elev > 2001, '2001-2500',
                             ifelse(p_precip_sn$elev > 1501, '1501-2000',        
                             ifelse(p_precip_sn$elev > 1001, '1001-1500', 
-                            ifelse(p_precip_sn$elev > 501, '501-1000', '0-500')))))))
+                            ifelse(p_precip_sn$elev > 501, '501-1000', '301-500')))))))
                                 
 # Reorder las elevaciones
-p_precip_sn$elevC <- reorder.factor(p_precip_sn$elevC, new.order=c("0-500","501-1000","1001-1500","1501-2000","2001-2500","2501-3000","3001-3500"))
+p_precip_sn$elevC <- reorder.factor(p_precip_sn$elevC, new.order=c("301-500","501-1000","1001-1500","1501-2000","2001-2500","2501-3000","3001-3500"))
 
 # Obtener los summary datos de los taus
 aux.prec <- ddply(p_precip_sn, c('elevC', 'sig'), summarise,
@@ -210,10 +210,10 @@ p_tmax_sn$elevC <- as.factor(ifelse(p_tmax_sn$elev > 3001, '3001-3500',
                              ifelse(p_tmax_sn$elev > 2001, '2001-2500',
                              ifelse(p_tmax_sn$elev > 1501, '1501-2000',        
                              ifelse(p_tmax_sn$elev > 1001, '1001-1500', 
-                             ifelse(p_tmax_sn$elev > 501, '501-1000', '0-500')))))))
+                             ifelse(p_tmax_sn$elev > 501, '501-1000', '301-500')))))))
 
 # Reorder las elevaciones
-p_tmax_sn$elevC <- reorder.factor(p_tmax_sn$elevC, new.order=c("0-500","501-1000","1001-1500","1501-2000","2001-2500","2501-3000","3001-3500"))
+p_tmax_sn$elevC <- reorder.factor(p_tmax_sn$elevC, new.order=c("301-500","501-1000","1001-1500","1501-2000","2001-2500","2501-3000","3001-3500"))
 
 # Obtener los summary datos de los taus
 aux.tmax <- ddply(p_tmax_sn, c('elevC', 'sig'), summarise,
@@ -312,10 +312,10 @@ p_tmin_sn$elevC <- as.factor(ifelse(p_tmin_sn$elev > 3001, '3001-3500',
                              ifelse(p_tmin_sn$elev > 2001, '2001-2500',
                              ifelse(p_tmin_sn$elev > 1501, '1501-2000',        
                              ifelse(p_tmin_sn$elev > 1001, '1001-1500', 
-                             ifelse(p_tmin_sn$elev > 501, '501-1000', '0-500')))))))
+                             ifelse(p_tmin_sn$elev > 501, '501-1000', '301-500')))))))
 
 # Reorder las elevaciones
-p_tmin_sn$elevC <- reorder.factor(p_tmin_sn$elevC, new.order=c("0-500","501-1000","1001-1500","1501-2000","2001-2500","2501-3000","3001-3500"))
+p_tmin_sn$elevC <- reorder.factor(p_tmin_sn$elevC, new.order=c("301-500","501-1000","1001-1500","1501-2000","2001-2500","2501-3000","3001-3500"))
 
 # Obtener los summary datos de los taus
 aux.tmin <- ddply(p_tmin_sn, c('elevC', 'sig'), summarise,
@@ -364,4 +364,43 @@ gbtmin <- g.bottom.tmin + ylim(-0.3,.3)
 gbprecip <- g.bottom.precip + ylim(-0.3,.3)
 
 grid.arrange(arrangeGrob(g.top.precip, g.top.tmax, g.top.tmin, gbprecip, gbtmax, gbtmin, ncol=3, nrow=2, heights = c(1/5, 4/5)))
+
+
+
+
+# -----------------------------------------------------------
+# Plot combinado tmax, precip para dossier 
+## Create name of variable 
+df.tmax$variable <- rep('tmax',nrow(df.tmax))
+df.precip$variable <- rep('precip', nrow(df.precip))
+## Join the dataframes 
+df <- rbind(df.precip, df.tmax)
+
+# Plot taus conjuntas 
+plot.taus <- ggplot(df, aes(x=elevC, y=mean.group.elev, group=variable, colour=variable)) + 
+  geom_errorbar(aes(ymax = mean.group.elev + (10*se.group.elev), ymin=mean.group.elev - (10*se.group.elev)), width=.1) + 
+  geom_line() + 
+  geom_point(size=1.5, shape=19) + 
+  ylim(-.5,.5)+
+  theme_bw() + xlab('Elevacion') + ylab(expression(tau))+ 
+  theme(axis.text.x= element_text(angle=90)) +
+  scale_colour_manual(values = c("#2166ac","#b2182b"))
+plot.taus
+ExportPlot(plot.taus, filename = paste(di, '/images/plot.taus', sep=''), width=5, height=10)
+
+
+# Plot percentage pixels sig. 
+plot.sig <- ggplot(df, aes(x = elevC, y = per.sig, fill=variable)) +
+  geom_bar(stat='identity', position='dodge') + 
+  theme_bw() + 
+  ylab('% pixeles significativos (<0.05)') + 
+  xlab('Elevacion')+
+  theme(axis.title.y = element_text(vjust =0.25), 
+          axis.text.x= element_text(angle=90)) + 
+  scale_fill_manual(values = c("#2166ac","#b2182b"))
+plot.sig 
+ExportPlot(plot.sig, filename = paste(di, '/images/plot.sig', sep=''), width=5, height=4)
+# -----------------------------------------------------------
+
+
 

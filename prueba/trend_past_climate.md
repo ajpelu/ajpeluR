@@ -961,3 +961,54 @@ grid.arrange(arrangeGrob(g.top.precip, g.top.tmax, g.top.tmin, gbprecip, gbtmax,
     ## Warning: Removed 4 rows containing missing values (geom_path).
 
 ![plot of chunk plotCombinados](./trend_past_climate_files/figure-markdown_github/plotCombinados.png)
+
+A continuación vamos a preparar dos gráficos combinados para el dossier. Primero el plot de los taus
+
+``` r
+# -----------------------------------------------------------
+# Plot combinado tmax, precip para dossier 
+## Create name of variable 
+df.tmax$variable <- rep('tmax',nrow(df.tmax))
+df.precip$variable <- rep('precip', nrow(df.precip))
+## Join the dataframes 
+df <- rbind(df.precip, df.tmax)
+
+# Plot taus conjuntas 
+plot.taus <- ggplot(df, aes(x=elevC, y=mean.group.elev, group=variable, colour=variable)) + 
+  geom_errorbar(aes(ymax = mean.group.elev + (10*se.group.elev), ymin=mean.group.elev - (10*se.group.elev)), width=.1) + 
+  geom_line() + 
+  geom_point(size=1.5, shape=19) + 
+  ylim(-.5,.5)+
+  theme_bw() + xlab('Elevacion') + ylab(expression(tau))+ 
+  theme(axis.text.x= element_text(angle=90)) +
+  scale_colour_manual(values = c("#2166ac","#b2182b"))
+plot.taus
+```
+
+![plot of chunk plotTaus](./trend_past_climate_files/figure-markdown_github/plotTaus.png)
+
+``` r
+# ExportPlot(plot.taus, filename = paste(di, '/images/plot.taus', sep=''), width=5, height=10)
+```
+
+Y ahora el porcentaje de pixeles por significativos
+
+``` r
+# Plot percentage pixels sig. 
+plot.sig <- ggplot(df, aes(x = elevC, y = per.sig, fill=variable)) +
+  geom_bar(stat='identity', position='dodge') + 
+  theme_bw() + 
+  ylab('% pixeles significativos (<0.05)') + 
+  xlab('Elevacion')+
+  theme(axis.title.y = element_text(vjust =0.25), 
+          axis.text.x= element_text(angle=90)) + 
+  scale_fill_manual(values = c("#2166ac","#b2182b"))
+plot.sig 
+```
+
+![plot of chunk plotSig](./trend_past_climate_files/figure-markdown_github/plotSig.png)
+
+``` r
+# ExportPlot(plot.sig, filename = paste(di, '/images/plot.sig', sep=''), width=5, height=4)
+# -----------------------------------------------------------
+```
