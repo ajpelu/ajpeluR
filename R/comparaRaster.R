@@ -20,8 +20,8 @@ comparaRaster <- function(x, y, nclases){
   
   for (i in nclases){ 
     # Selecciona clase inicial 
-    sel_inicial <- ifelse(x[]!=i, 99999, 1)
-    sel_inicial[sel_inicial[]> 100] <- NA
+    sel_inicial <- ifelse(x[]!=i, 9999999, 1)
+    sel_inicial[sel_inicial[]> 10000] <- NA
     # aux[aux[]<= -100] <- NA
     
     aux <- sel_inicial*resta 
