@@ -21,7 +21,7 @@ dia.juliano <- function(x){
   juliano.bruto <- as.numeric(julian(date.text))
   # d # Calculo el dia juliano para el primer dia del año de esa fecha
   # d1 # Creo el primer dia del año de la fecha dada
-  dia.referencia.year <- paste("01/01/",year) 
+  dia.referencia.year <- paste("01/01/",year, sep='') 
   # d2 # Calculo el dia juliano para esa fecha
   juliano.ref <- as.numeric(julian(as.Date(dia.referencia.year,"%d/%m/%Y")))
   # e # Restar día juliano fecha - dia juliano primer dia del año de la fecha
