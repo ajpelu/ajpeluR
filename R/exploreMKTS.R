@@ -22,6 +22,9 @@ exploreMKTS <- function(x, alpha){
   # n 
   n <- nrow(x)
   
+  # filter NA (RPerez) 
+  x <- x[which(!is.na(x$tau)),]
+  
   # Positive TAU ------------------------------
   # pixels with positive tau
   tau_pos <- x[x$tau >0,]
