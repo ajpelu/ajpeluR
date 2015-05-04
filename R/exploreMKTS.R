@@ -27,7 +27,7 @@ exploreMKTS <- function(x, alpha){
   
   # Positive TAU ------------------------------
   # pixels with positive tau
-  tau_pos <- x[x$tau >0,]
+  tau_pos <- x[x$tau >0.15,]
   n_tau_pos <- nrow(tau_pos) 
   # % pixels with positive tau
   pct_tau_pos <- round((n_tau_pos / n)*100,2)
@@ -40,7 +40,7 @@ exploreMKTS <- function(x, alpha){
   
   # Negative TAU ------------------------------
   # pixels with negative tau
-  tau_neg <- x[x$tau <0,]
+  tau_neg <- x[x$tau <-0.15,]
   n_tau_neg <- nrow(tau_neg) 
   # % pixels with negative tau
   pct_tau_neg <- round((n_tau_neg / n)*100,2)
